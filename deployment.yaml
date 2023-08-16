@@ -31,10 +31,23 @@ spec:
   selector:
     app: vnode-app
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vnode-app-svc2
+spec:
+  selector:
+    app: stream-001
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: stream-001-ingress
+  name: vnode-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -46,6 +59,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: vnode-app-svc
+                name: vnode-app-svc2
                 port:
                   name: http
