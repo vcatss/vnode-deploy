@@ -44,21 +44,19 @@ spec:
       targetPort: 3000
   type: LoadBalancer
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   name: vnode-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: ReplacePathRegex
 spec:
-  rules:
-    - host: test1.ctict.net
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vnode-app-svc2
-                port:
-                  name: http
+  #entryPoints:
+  routes:
+  - kind: Rule
+    match: Host(`test1.ctict.net`) # [3]
+    priority: 10                    # [4]
+    services:
+    - name: vnode-app-svc2
+      port: 80
