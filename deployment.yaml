@@ -30,3 +30,22 @@ spec:
     nodePort: 32000
   selector:
     app: vnode-app
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stream-001-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: test1.ctict.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vnode-app-svc
+                port:
+                  name: http
