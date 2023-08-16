@@ -58,5 +58,5 @@ spec:
     match: Host(`test1.ctict.net`) # [3]
     priority: 10                    # [4]
     services:
-    - name: vnode-app-svc2
-      port: 3000
+    - name: vnode-app-svc
+      port: 32000
