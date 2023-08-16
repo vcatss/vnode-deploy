@@ -59,4 +59,4 @@ spec:
     priority: 10                    # [4]
     services:
     - name: vnode-app-svc2
-      port: 80
+      port: 3000
