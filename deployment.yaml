@@ -55,7 +55,7 @@ spec:
   #entryPoints:
   routes:
   - kind: Rule
-    match: Host(`test1.ctict.net`) # [3]
+    match: Host(`test.mmo-bot.com`) # [3]
     priority: 10                    # [4]
     services:
     - name: vnode-app-svc
