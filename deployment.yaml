@@ -1,62 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vnode-app-deploy
+  name: nginx-deployment
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
-      app: vnode-app
+      app: nginx
   template:
     metadata:
       labels:
-        app: vnode-app
+        app: nginx
     spec:
       containers:
-      - name: vnode-app-container
-        image: vcats/vnode-test:0.0.51
-        ports:
-        - containerPort: 3000
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vnode-app-svc
-spec:
-  type: NodePort
-  ports:
-  - port: 80
-    targetPort: 3000
-    nodePort: 32000
-  selector:
-    app: vnode-app
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: vnode-app-svc2
+  name: nginx-service
 spec:
   selector:
-    app: stream-001
+    app: nginx
   ports:
-    - name: http
+    - protocol: TCP
       port: 80
-      targetPort: 3000
+      targetPort: 80
   type: LoadBalancer
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: vnode-ingress
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.rule.type: ReplacePathRegex
+  name: nginx-ingress
 spec:
-  #entryPoints:
+  entryPoints:
   routes:
   - kind: Rule
-    match: Host(`test.mmo-bot.com`) # [3]
-    priority: 10                    # [4]
+    match: Host(`nginx2.mmo-bot.com`)
+    priority: 10
     services:
-    - name: vnode-app-svc
-      port: 32000
+    - name: nginx-service
+      port: 80
